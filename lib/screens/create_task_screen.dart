@@ -439,7 +439,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
             MultiSelectDialogField<String>(
               items: _availableUsers
                   .map((user) => MultiSelectItem<String>(
-                      user.id, user.displayName))
+                      user.id, user.displayName ?? user.email))
                   .toList(),
               initialValue: _assignedUsers,
               title: const Text("Select Users"),

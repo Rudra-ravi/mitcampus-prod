@@ -74,4 +74,45 @@ class UserRepository {
       throw Exception('Failed to fetch users: $e');
     }
   }
+
+  Future<void> updateUserDetails({
+    required String userId,
+    required String displayName,
+    required String email,
+    String? password,
+  }) async {
+    try {
+      // Update Firestore document
+      await _firestore.collection('users').doc(userId).update({
+        'displayName': displayName,
+        'email': email,
+      });
+
+      // Update Firebase Auth if password is provided
+      if (password != null && password.isNotEmpty) {
+        final currentAuthUser = _auth.currentUser;
+        if (currentAuthUser?.uid == userId) {
+          await currentAuthUser?.updatePassword(password);
+          await currentAuthUser?.verifyBeforeUpdateEmail(email);
+        }
+      }
+    } catch (e) {
+      throw Exception('Failed to update user: $e');
+    }
+  }
+
+  Future<void> deleteUser(String userId) async {
+    try {
+      // Delete from Firestore
+      await _firestore.collection('users').doc(userId).delete();
+      
+      // Delete from Firebase Auth
+      final currentAuthUser = _auth.currentUser;
+      if (currentAuthUser?.uid == userId) {
+        await currentAuthUser?.delete();
+      }
+    } catch (e) {
+      throw Exception('Failed to delete user: $e');
+    }
+  }
 }

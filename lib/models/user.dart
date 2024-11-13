@@ -5,34 +5,32 @@ enum UserRole { user, admin, hod }
 class User {
   final String id;
   final String email;
+  final String? displayName;
   final bool isHOD;
-  final String displayName;
   final UserRole role;
 
   User({
     required this.id,
     required this.email,
+    this.displayName,
     required this.isHOD,
-    String? displayName,
-  }) : 
-    role = isHOD ? UserRole.hod : UserRole.user,
-    displayName = displayName ?? email.split('@')[0];
+  })  : role = isHOD ? UserRole.hod : UserRole.user;
 
   factory User.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    final data = doc.data() as Map<String, dynamic>;
     return User(
       id: doc.id,
-      email: data['email'],
-      isHOD: data['email'] == 'hodece@mvit.edu.in',
+      email: data['email'] ?? '',
       displayName: data['displayName'],
+      isHOD: data['isHOD'] ?? false,
     );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
       'email': email,
-      'isHOD': isHOD,
       'displayName': displayName,
+      'isHOD': isHOD,
     };
   }
 

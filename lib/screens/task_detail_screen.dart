@@ -29,7 +29,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   Future<void> _loadUserNames() async {
     try {
       final users = await _userRepository.getAllUsers();
-      final userMap = {for (var user in users) user.id: user.displayName};
+      final userMap = {
+        for (var user in users) 
+          user.id: user.displayName ?? user.email
+      };
       setState(() {
         _userNames = userMap;
       });

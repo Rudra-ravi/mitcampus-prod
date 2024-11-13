@@ -21,3 +21,23 @@ class CreateNewUser extends SettingsEvent {
     required this.displayName,
   });
 }
+
+class UpdateUserEvent extends SettingsEvent {
+  final String userId;
+  final String displayName;
+  final String email;
+  final String? password;
+
+  UpdateUserEvent({
+    required this.userId,
+    required this.displayName,
+    required this.email,
+    this.password,
+  });
+}
+
+class DeleteUserEvent extends SettingsEvent {
+  final String userId;
+
+  DeleteUserEvent({required this.userId});
+}

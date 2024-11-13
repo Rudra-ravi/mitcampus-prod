@@ -24,3 +24,7 @@ class DisplayNameUpdated extends SettingsState {
 }
 
 class UserCreated extends SettingsState {}
+
+class UserUpdated extends SettingsState {}
+
+class UserDeleted extends SettingsState {}

@@ -16,6 +16,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<ShowAboutDialog>(_onShowAboutDialog);
     on<UpdateDisplayName>(_onUpdateDisplayName);
     on<CreateNewUser>(_onCreateNewUser);
+    on<UpdateUserEvent>(_onUpdateUser);
+    on<DeleteUserEvent>(_onDeleteUser);
   }
 
   Future<void> _onShowAboutDialog(ShowAboutDialog event, Emitter<SettingsState> emit) async {
@@ -115,6 +117,33 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       emit(UserCreated());
     } catch (e) {
       emit(SettingsError(message: 'Failed to create user: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onUpdateUser(UpdateUserEvent event, Emitter<SettingsState> emit) async {
+    try {
+      emit(SettingsLoading());
+      
+      await _userRepository.updateUserDetails(
+        userId: event.userId,
+        displayName: event.displayName,
+        email: event.email,
+        password: event.password,
+      );
+      
+      emit(UserUpdated());
+    } catch (e) {
+      emit(SettingsError(message: 'Failed to update user: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onDeleteUser(DeleteUserEvent event, Emitter<SettingsState> emit) async {
+    try {
+      emit(SettingsLoading());
+      await _userRepository.deleteUser(event.userId);
+      emit(UserDeleted());
+    } catch (e) {
+      emit(SettingsError(message: 'Failed to delete user: ${e.toString()}'));
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:mitcampus/blocs/auth_bloc.dart';
 import 'package:mitcampus/blocs/chat_bloc.dart';
 import 'package:mitcampus/blocs/splash/splash_bloc.dart';
 import 'package:mitcampus/blocs/task_bloc.dart';
+import 'package:mitcampus/blocs/settings_bloc.dart';
 import 'package:mitcampus/firebase_options.dart';
 import 'package:mitcampus/presentation/screens/splash_screen.dart';
 import 'package:mitcampus/screens/home_screen.dart';
@@ -42,6 +43,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<TaskBloc>(
           create: (context) => TaskBloc()..add(LoadTasksEvent()),
+        ),
+        BlocProvider<SettingsBloc>(
+          create: (context) => SettingsBloc(),
         ),
       ],
       child: MaterialApp(
