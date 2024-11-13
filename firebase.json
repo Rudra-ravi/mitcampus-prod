@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"android":{"default":{"projectId":"mitcampus-prod","appId":"1:279541587954:android:9d51105f057d1d7353956b","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"mitcampus-prod","configurations":{"android":"1:279541587954:android:9d51105f057d1d7353956b","ios":"1:279541587954:ios:3741f385358cfb5f53956b"}}}}}}

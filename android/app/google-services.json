@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "279541587954",
+    "project_id": "mitcampus-prod",
+    "storage_bucket": "mitcampus-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279541587954:android:9d51105f057d1d7353956b",
+        "android_client_info": {
+          "package_name": "com.mvit.mitcampus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEV61dD5ZaILVLClfeT3ckq5Z5uHyNT7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
