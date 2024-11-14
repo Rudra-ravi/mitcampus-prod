@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import '../events/settings_event.dart';
-import '../models/user.dart';
+import '../models/user.dart' as app_user;
 import '../repositories/user_repository.dart';
 import '../states/settings_state.dart';
 
@@ -71,50 +73,48 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     try {
       emit(SettingsLoading());
       
-      // Check if current user is HOD
-      final currentUser = await _userRepository.getCurrentUser();
-      if (!currentUser.isHOD) {
-        throw Exception('Only HOD can create new users');
+      // Store current HOD auth instance
+      final currentUser = _auth.currentUser;
+      if (currentUser == null) {
+        throw Exception('No authenticated user found');
       }
 
-      // Create a secondary Firebase Auth instance for user creation
-      final secondaryAuth = auth.FirebaseAuth.instance;
-      final currentAuth = await secondaryAuth.createUserWithEmailAndPassword(
-        email: event.email,
-        password: event.password,
+      // Create a secondary Firebase Auth instance for new user creation
+      final secondaryApp = await Firebase.initializeApp(
+        name: 'SecondaryApp',
+        options: Firebase.app().options,
       );
+      final secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
 
-      // Get the user credential but don't sign in
-      final newUserCredential = currentAuth.user;
-      if (newUserCredential == null) {
-        throw Exception('Failed to create user account');
+      try {
+        // Create user with secondary auth instance
+        final userCredential = await secondaryAuth.createUserWithEmailAndPassword(
+          email: event.email,
+          password: event.password,
+        );
+
+        // Create user document in Firestore
+        final newUser = app_user.User(
+          id: userCredential.user!.uid,
+          email: event.email,
+          displayName: event.displayName,
+          isHOD: false,
+        );
+
+        await _userRepository.createUser(newUser);
+
+        // Delete the secondary app
+        await secondaryApp.delete();
+
+        emit(UserCreated());
+      } finally {
+        // Clean up secondary app even if there's an error
+        try {
+          await secondaryApp.delete();
+        } catch (e) {
+          // Ignore cleanup errors
+        }
       }
-
-      // Update display name
-      await newUserCredential.updateDisplayName(event.displayName);
-
-      // Create user document in Firestore
-      final newUser = User(
-        id: newUserCredential.uid,
-        email: event.email,
-        isHOD: false,
-        displayName: event.displayName,
-      );
-
-      await _userRepository.createUser(newUser);
-
-      // Sign out the newly created user to restore HOD session
-      await secondaryAuth.signOut();
-      
-      // Re-authenticate HOD if needed
-      if (_auth.currentUser == null) {
-        // You might want to store HOD credentials securely or handle re-authentication
-        // For now, we'll assume HOD session is maintained
-        emit(SettingsError(message: 'HOD session expired. Please login again.'));
-        return;
-      }
-
-      emit(UserCreated());
     } catch (e) {
       emit(SettingsError(message: 'Failed to create user: ${e.toString()}'));
     }

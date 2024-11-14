@@ -58,7 +58,11 @@ class UserRepository {
         throw Exception('Only HOD can create new users');
       }
 
-      await _firestore.collection('users').doc(user.id).set(user.toFirestore());
+      // Create the user document in Firestore
+      await _firestore
+          .collection('users')
+          .doc(user.id)
+          .set(user.toFirestore());
     } catch (e) {
       throw Exception('Failed to create user: $e');
     }

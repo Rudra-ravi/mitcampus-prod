@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mitcampus/services/credential_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Events
@@ -56,11 +57,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
       
-      // Set display name if not already set
-      if (userCredential.user != null && userCredential.user!.displayName == null) {
-        await userCredential.user!.updateDisplayName(
-          userCredential.user!.email?.split('@')[0] ?? 'User'
-        );
+      // If user is HOD, securely store password
+      if (event.email == 'hodece@mvit.edu.in') {
+        await CredentialManager.saveHODPassword(event.password);
       }
       
       await _saveAuthStatus(true);
