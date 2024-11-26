@@ -59,6 +59,16 @@ To use the project, follow these guidelines:
 - **Task Management:** Create, update, and manage tasks. Assign tasks to users and track their progress.
 - **Notifications:** Receive notifications for new messages and task updates.
 
+## Screenshots
+
+<img src="https://github.com/user-attachments/assets/95cc0213-184d-4a64-8b99-f4897016447c" alt="2024-11-17 at 10 48 44 AM" width="200">
+<img src="https://github.com/user-attachments/assets/0b856100-4b96-433a-99d3-beda91e97373" alt="2024-11-17 at 10 40 31 AM (2)" width="200">
+<img src="https://github.com/user-attachments/assets/87602b01-7cef-484f-844c-1abae7889420" alt="2024-11-17 at 10 40 31 AM (1)" width="200">
+<img src="https://github.com/user-attachments/assets/852c4489-1735-451c-bd0b-5783b1692a93" alt="2024-11-17 at 10 40 31 AM" width="200">
+<img src="https://github.com/user-attachments/assets/d2939dbb-8b26-4d88-be38-055e10df63d0" alt="2024-11-17 at 10 40 30 AM (2)" width="200">
+<img src="https://github.com/user-attachments/assets/275e551b-d38a-426a-b71e-4ef3c1612964" alt="2024-11-17 at 10 40 30 AM (1)" width="200">
+<img src="https://github.com/user-attachments/assets/a956d958-15a6-4258-b472-e13a80060389" alt="2024-11-17 at 10 40 30 AM" width="200">
+
 ## Dependencies
 
 The project uses the following dependencies:
